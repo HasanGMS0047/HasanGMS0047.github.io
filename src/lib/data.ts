@@ -71,10 +71,10 @@ export const projects: Project[] = [
   },
   {
     id: "nestly",
-    kind: "Personal project",
+    kind: "Group project",
     stack: ["Next.js","Supabase","JavaScript"],
     title: "Nestly",
-    line: "Personal project: student housing in Dhaka",
+    line: "Group project: student housing in Dhaka",
     body: "Verified shared housing near private university campuses, with the full cost shown, flatmate matching and a place to buy and sell second-hand household items.",
     image: "/images/work/nestly",
     alt: "The Nestly home page: a search for flats in Dhaka by zone, room type and budget",
