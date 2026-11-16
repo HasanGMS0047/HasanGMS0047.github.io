@@ -2,32 +2,25 @@
 
 import { useState } from "react";
 
-type Status = { kind: "idle" | "sending" | "sent" | "error"; text?: string };
+type Status = { kind: "idle" | "sent"; text?: string };
 
+// The site is static, so there is no server to send mail. The form fills in an email
+// in the visitor's own mail app instead.
 export function ContactForm({ email }: { email: string }) {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     if (!form.reportValidity()) return;
-    setStatus({ kind: "sending" });
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
-      });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
-      if (!res.ok) throw new Error(data.error || "Something went wrong.");
-      form.reset();
-      setStatus({ kind: "sent", text: "Message sent. I'll reply to the email you gave." });
-    } catch (err) {
-      setStatus({
-        kind: "error",
-        text: `${err instanceof Error ? err.message : "Not sent."} You can also email ${email}.`,
-      });
-    }
+    const data = new FormData(form);
+    const name = String(data.get("name") ?? "").trim();
+    const from = String(data.get("email") ?? "").trim();
+    const subject = String(data.get("subject") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
+    const body = `${message}\n\n${name}\n${from}`;
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setStatus({ kind: "sent", text: `Your email app should open with the message filled in. If it doesn't, write to ${email}.` });
   }
 
   return (
@@ -48,16 +41,11 @@ export function ContactForm({ email }: { email: string }) {
       </label>
       <label className="field">
         <span>Message</span>
-        <textarea name="message" rows={6} required maxLength={5000} />
-      </label>
-      {/* honeypot: hidden from people, bots fill it in */}
-      <label className="hp" aria-hidden="true">
-        Website
-        <input name="website" type="text" tabIndex={-1} autoComplete="off" />
+        <textarea name="message" rows={6} required maxLength={1500} />
       </label>
       <div className="form__foot">
-        <button className="btn btn--red" type="submit" disabled={status.kind === "sending"}>
-          {status.kind === "sending" ? "Sending…" : "Send message"}
+        <button className="btn btn--red" type="submit">
+          Open in my email app
           <span className="btn__arrow" aria-hidden="true">→</span>
         </button>
         <p className={`form__status form__status--${status.kind}`} role="status" aria-live="polite">

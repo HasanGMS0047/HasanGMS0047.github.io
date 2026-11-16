@@ -1,43 +1,33 @@
-# Mohammad Mahadi Hasan — Portfolio
+# Mohammad Mahadi Hasan: portfolio
 
-Personal portfolio site for Mohammad Mahadi Hasan, a Computer Science & Engineering student at
-United International University (UIU), Dhaka. Built with a Bauhaus-inspired red/black/yellow
-design system, dark/light theming, and real project data.
+Personal portfolio of Mohammad Mahadi Hasan, a Computer Science and Engineering student at United
+International University (UIU), Dhaka.
 
-**Live:** https://mohammad-mahadi-hasan-portfolio.vercel.app
+**Live:** https://hasangms0047.github.io
+**Resume:** https://hasangms0047.github.io/Mohammad_Mahadi_Hasan_Resume.pdf
 
 ## Stack
 
-- Next.js (App Router) + TypeScript
-- Tailwind CSS v4
-- Framer Motion
-- next-themes (dark/light persistence)
+- Next.js (App Router) and TypeScript, exported as a static site
+- Plain CSS in `src/app/globals.css`
+- Hosted on GitHub Pages
 
-## Getting Started
+## Run it locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view it.
+Open http://localhost:3000.
 
 ## Editing content
 
-All personal content (bio, skills, projects, activities, contact info) lives in a single file:
-[`src/lib/data.ts`](src/lib/data.ts). Update that file to change what appears on the site.
-
-## Contact form emails
-
-The contact form sends email via [Resend](https://resend.com):
-
-1. Sign up at resend.com (free) and create an API key.
-2. Copy `.env.example` to `.env.local` and paste the key into `RESEND_API_KEY`.
-3. Add the same `RESEND_API_KEY` under Vercel → Project → Settings → Environment Variables.
-
-Without a verified custom domain, Resend only delivers to the email address you signed up
-with — which is exactly what this form needs, since messages go to the site owner.
+Names, links, projects and the character sheet live in `src/lib/data.ts`. The resume PDF is
+`public/Mohammad_Mahadi_Hasan_Resume.pdf`: replace the file to update it.
 
 ## Deployment
 
-Deployed on [Vercel](https://vercel.com). Pushing to `main` triggers an automatic deploy.
+Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site (`npm run build`
+writes the static files to `out/`) and publishes them to GitHub Pages. The contact form opens the
+visitor's email app, because a static site has no server to send mail.

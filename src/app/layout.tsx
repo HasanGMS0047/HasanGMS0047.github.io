@@ -1,19 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Syne, Manrope, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/data";
+import { SiteFooter, SiteNav } from "@/components/site-chrome";
 
-// Dark & cinematic: Syne for the big display type, Manrope for reading, JetBrains Mono for labels.
-const display = Syne({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-display", display: "swap" });
-const body = Manrope({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body", display: "swap" });
+// Fraunces for display, Source Serif 4 for reading, JetBrains Mono for small labels.
+const display = Fraunces({ subsets: ["latin"], style: ["normal", "italic"], axes: ["opsz"], variable: "--font-display", display: "swap" });
+const body = Source_Serif_4({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-body", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: site.title,
+  title: { default: site.title, template: `%s · ${site.name}` },
   description: site.description,
   authors: [{ name: site.name }],
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: site.url,
@@ -30,13 +30,20 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0a0a0b",
+  themeColor: "#0c1411",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <a className="skip" href="#main">
+          Skip to content
+        </a>
+        <SiteNav />
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   );
 }
